@@ -31,7 +31,10 @@ app.use("/uploads", express.static("uploads"));
 //middlewares
 app.use(logger("dev"));
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'https://mapit-eta.vercel.app',
+  credentials: true
+}));
 
 app.get('/', (req, res) => {
   res.status(200).json('Welcome, your app is working well');
