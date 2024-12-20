@@ -1,5 +1,6 @@
 {
-  "rewrites":  [
-    {"source": "/(.*)", "destination": "/index.html"}
+  "rewrites": [
+    { "source": "/(.*)", "destination": "backend-nowi8n3pr-prasaths-projects-8f4268ba.vercel.app/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
