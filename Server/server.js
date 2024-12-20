@@ -24,19 +24,6 @@ const connect = async () => {
     throw error;
   }
 };
-app.use((req, res, next) => {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', 'https://your-frontend-domain.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-  // Allow preflight OPTIONS request
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end(); // Respond to preflight request
-  }
-
-  next(); // Continue to the next middleware/route handler
-});
 
 // Serve uploaded files
 app.use("/uploads", express.static("uploads"));
@@ -50,6 +37,20 @@ app.use(cors({
   methods: "GET,POST,PUT,DELETE,OPTIONS",
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+app.options('*', cors());
+app.use((req, res, next) => {
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', 'https://your-frontend-domain.vercel.app');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // Allow preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end(); // Respond to preflight request
+  }
+
+  next(); // Continue to the next middleware/route handler
+});
 
 app.get('/', (req, res) => {
   res.status(200).json('Welcome, your app is working well');
