@@ -31,26 +31,26 @@ app.use("/uploads", express.static("uploads"));
 //middlewares
 app.use(logger("dev"));
 app.use(express.json());
-app.use(cors({
-  origin: 'https://mapit-eta.vercel.app',
-  credentials: true,
-  methods: "GET,POST,PUT,DELETE,OPTIONS",
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-app.options('*', cors());
-app.use((req, res, next) => {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', 'https://mapit-eta.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+const corsOptions = {
+    origin: 'https://mapit-eta.vercel.app', // Allow this frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+};
 
-  // Allow preflight OPTIONS request
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end(); // Respond to preflight request
-  }
+app.use(cors(corsOptions));
+export default function handler(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', 'https://mapit-eta.vercel.app');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-  next(); // Continue to the next middleware/route handler
-});
+    if (req.method === 'OPTIONS') {
+        // Handle preflight request
+        res.status(200).end();
+        return;
+    }
+
+    // Your API logic here
+}
 
 app.get('/', (req, res) => {
   res.status(200).json('Welcome, your app is working well');
