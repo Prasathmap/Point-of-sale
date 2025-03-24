@@ -10,7 +10,7 @@ const cookieParser =require("cookie-parser");
 dotenv.config();
 
 //routes
-const categoryRouter = require("./routes/categories.js");
+// const categoryRouter = require("./routes/categories.js");
 const productRouter = require("./routes/productRoute.js");
 const invoiceRoute = require("./routes/invoiceRoutes.js");
 const authRoute = require("./routes/auth.js");
