@@ -1,15 +1,37 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const app = express();
 const cors = require("cors");
 const logger = require("morgan");
-const port = process.env.PORT || 4000;
-const cookieParser =require("cookie-parser");
+const cookieParser = require("cookie-parser");
 
 dotenv.config();
 
-//routes
+const app = express();
+const port = process.env.PORT || 4000;
+
+// MongoDB Connection
+const connect = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+  }
+};
+
+// Middleware
+app.use(logger("dev"));
+app.use(express.json());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.use(cookieParser());
+app.use("/uploads", express.static("uploads"));
+
+// Routes
 const categoryRouter = require("./routes/categories.js");
 const productRouter = require("./routes/productRoute.js");
 const invoiceRoute = require("./routes/invoiceRoutes.js");
@@ -23,31 +45,9 @@ const attenderRouter = require("./routes/attenderRoute");
 const taxRouter = require("./routes/taxRoute");
 const unitRouter = require("./routes/unitRoute");
 
-const connect = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("Connected to MongoDB");
-  } catch (error) {
-    throw error;
-  }
-};
-
-// Serve uploaded files
-app.use("/uploads", express.static("uploads"));
-
-//middlewares
-app.use(logger("dev"));
-app.use(express.json());
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
 app.get('/', (req, res) => {
   res.status(200).json('Welcome, your app is working well');
-})
-app.use(cookieParser());
+});
 
 app.use("/api/category", categoryRouter);
 app.use("/api/product", productRouter);
@@ -61,7 +61,7 @@ app.use("/api/tax", taxRouter);
 app.use("/api/coupon", couponRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/unit", unitRouter);
-app.listen(port, () => {
-  connect();
-  console.log(`Listening on port ${port}`);
-});
+
+// Export the handler for Vercel
+connect();
+module.exports = app;
