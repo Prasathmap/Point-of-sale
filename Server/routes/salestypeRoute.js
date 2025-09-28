@@ -5,7 +5,7 @@ const {
   deleteSalestype,
   getSalestype,
   getallSalestype,getstatus,
-} = require("../controller/SalestypeCtrl");
+} = require("../controller/salestypeCtrl");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
@@ -17,3 +17,4 @@ router.get("/",authMiddleware, getallSalestype);
 router.put("/status/:id", authMiddleware, isAdmin, getstatus);
 
 module.exports = router;
+
