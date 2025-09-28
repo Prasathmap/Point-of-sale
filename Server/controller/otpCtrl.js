@@ -1,4 +1,4 @@
-const OTP = require("../models/otpModel");
+const OTP = require("../models/OtpModel");
 const User = require("../models/AdminModel");
 const asyncHandler = require("express-async-handler");
 const { generateOTP, sendEmailOTP } = require("../utils/otpUtils");
@@ -69,3 +69,4 @@ module.exports = {
   sendOTP,
   verifyOTP
 };
+
