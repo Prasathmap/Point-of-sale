@@ -35,6 +35,8 @@ const connect = async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     autoIndex: true,
+    serverSelectionTimeoutMS: 30000, // Increase to 30 seconds
+    socketTimeoutMS: 45000, // Increase socket timeout
   });
     console.log("Connected to MongoDB");
   } catch (error) {
